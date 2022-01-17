@@ -11,6 +11,12 @@ services:
       target: local
     ports:
       - "7777:80"
+    volumes:
+      - .:/app
+
+  memcached:
+    container_name: mymemcached
+    image: memcached:latest
 
 networks:
   default:
