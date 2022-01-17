@@ -4,6 +4,8 @@ namespace SocialPost\Cache\Factory;
 
 use Memcached;
 use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 
 /**
  * Class CacheFactory
@@ -19,7 +21,7 @@ class CacheFactory
      */
     public static function create(): CacheInterface
     {
-        throw new \Exception('No cache :(');
+        return new Psr16Cache(new MemcachedAdapter(self::getClient()));
     }
 
     /**
@@ -27,6 +29,9 @@ class CacheFactory
      */
     protected static function getClient(): Memcached
     {
-        return new Memcached();
+        $memcached = new Memcached();
+        $memcached->addServer($_ENV['MEMCACHED_HOST'], $_ENV['MEMCACHED_PORT']);
+
+        return $memcached;
     }
 }

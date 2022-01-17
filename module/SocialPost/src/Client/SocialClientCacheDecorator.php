@@ -14,9 +14,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 class SocialClientCacheDecorator implements SocialClientInterface
 {
 
-    //TODO: set cache ttl via .env
-    private const CACHE_TTL = 60 * 60; //hour
-
     /**
      * @var SocialClientInterface
      */
@@ -101,7 +98,7 @@ class SocialClientCacheDecorator implements SocialClientInterface
         if (null === $data) {
             $data = $callback();
 
-            $this->cache->set($key, $data, self::CACHE_TTL);
+            $this->cache->set($key, $data, (int)$_ENV['CACHE_TTL']);
 
             return $data;
         }

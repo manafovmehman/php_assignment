@@ -2,6 +2,7 @@
 
 namespace SocialPost\Driver\Factory;
 
+use Auth\Factory\AuthenticatorFactory;
 use SocialPost\Cache\Factory\CacheFactory;
 use SocialPost\Client\Factory\FictionalClientFactory;
 use SocialPost\Driver\FictionalDriver;
@@ -20,17 +21,9 @@ class FictionalDriverFactory
      */
     public static function create(): SocialDriverInterface
     {
-        try {
-            $cache = CacheFactory::create();
-        } catch (\Throwable $throwable) {
-            //Cache not ready :(
-            $cache = null;
-        }
-
         $client = FictionalClientFactory::create();
-        $driver = new FictionalDriver($client);
-        $driver->setCache($cache);
+        $auth = AuthenticatorFactory::create();
 
-        return $driver;
+        return new FictionalDriver($client, $auth);
     }
 }
